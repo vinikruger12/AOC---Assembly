@@ -1,6 +1,6 @@
 .data
    num: .asciiz "Digite um número\n"
-   ans: .asciiz "\Esse número tem essa quantidade de digitos\n"
+   ans: .asciiz "\nEsse número tem essa quantidade de digitos\n"
 
 .text 
 .globl main
@@ -34,6 +34,7 @@ digitos:
    sw $s0, 0($sp)
    add $s0, $s0, 0
    li $t0, 10
+   abs $a1, $a1
    while:
       addi $s0, $s0, 1
       div $a1, $a1, $t0 
