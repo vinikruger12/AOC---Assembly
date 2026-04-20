@@ -1,0 +1,64 @@
+.data 
+   vector: .space 32
+   msg: .asciiz "\nDigite um inteiro\n"
+   pares: .asciiz "\nPares: "
+   impares: .asciiz "\nImpares: "
+   
+.text
+.globl main
+main:
+   la $t0, vector
+   li $t1, 0
+   li $t2, 8
+   
+   while:
+      beq $t1, $t2, saida
+      sll $t3, $t1, 2
+      add $t3, $t3, $t0
+      la $a0, msg
+      li $v0, 4
+      syscall
+      li $v0, 5
+      syscall
+      sw $v0, 0($t3)
+      addi $t1, $t1, 1
+      j while
+
+saida:
+   li $t1, 0
+   li $t4, 0
+   li $t5, 0
+   li $t7, 1
+   loop:
+      beq $t1, $t2, final
+      sll $t3, $t1, 2
+      add $t3, $t3, $t0
+      lw $t6, 0($t3)
+      and $t6, $t6, $t7
+      beq $t6, $t7, ehImpar
+      addi $t4, $t4, 1
+      addi $t1, $t1, 1
+      j loop
+    ehImpar:
+       addi $t5, $t5, 1
+       addi $t1, $t1, 1
+       j loop
+
+final:
+   la $a0, pares
+   li $v0, 4
+   syscall
+   move $a0, $t4
+   li $v0, 1
+   syscall
+   
+   la $a0, impares
+   li $v0, 4
+   syscall
+   move $a0, $t5
+   li $v0, 1
+   syscall
+   
+end:
+   li $v0, 10
+   syscall
